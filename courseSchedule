@@ -1,0 +1,50 @@
+class Solution {
+    Map<Integer, List<Integer>> courseToDependencies;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        Map<Integer, List<Integer>> courseToDependencies = new HashMap<>();
+        Set<Integer> visited = new HashSet<>();
+        Set<Integer> checked = new HashSet<>();
+        for(int row = 0; row<prerequisites.length; row++){
+            int key = prerequisites[row][1];
+             // System.out.println("key "+key );
+            
+            List<Integer> dependencies = courseToDependencies.getOrDefault(key,new ArrayList<>());
+            dependencies.add(prerequisites[row][0]);
+            courseToDependencies.put(key, dependencies);            
+        }
+        this.courseToDependencies = courseToDependencies;
+        
+        for(int i = 0; i< numCourses; i++){
+            if(courseToDependencies.get(i)!=null){
+            if(isCycleDfs(i,visited, checked,courseToDependencies.get(i))) return false;
+        }
+        }
+        return true;
+    }
+    
+    private boolean isCycleDfs(int i,Set<Integer> visited, Set<Integer> checked, List<Integer> adjacencyList){
+        // System.out.println("Map "+courseToDependencies);
+        
+        boolean result;
+        if(visited.contains(i)) return true;
+        
+        if(checked.contains(i)) return false;
+        
+        visited.add(i);
+        // System.out.println("adjacencyList "+adjacencyList);
+        for(Integer neighbour : adjacencyList){
+            // System.out.println("neighbour "+courseToDependencies.get(neighbour));
+        if(courseToDependencies.get(neighbour)!=null){
+           if(isCycleDfs(neighbour,visited, checked, courseToDependencies.get(neighbour))){
+               return true;
+           }
+            }
+           
+        }
+         visited.remove(i);
+        checked.add(i);
+        
+        return false;
+    }
+}
