@@ -1,0 +1,73 @@
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+     
+        Map<Integer, List<Integer>> adjacents = createAdjacencyList(n, edges);
+        
+        Stack<Integer> stack = new Stack<>();
+        Set<Integer> visited = new HashSet<>();
+        
+        System.out.println(adjacents);
+        
+        // stack.push(0);
+        // visited.add(0);
+        if(n <=1 ) return n;
+        
+        int counter = 0;
+        
+        for(int key =0; key<n ; key++){
+            if(!visited.contains(key)){
+                counter++;
+                stack.push(key);
+                visited.add(key);
+                while(!stack.isEmpty()){
+                    Integer curr = stack.pop();
+            
+                    if(adjacents.get(curr)!=null){
+                    for(Integer adj : adjacents.get(curr)){
+                        if(adj!=null && !visited.contains(adj)){
+                            stack.push(adj);
+                            visited.add(adj);
+                        }
+                    }
+                }
+            
+                }
+            }
+        }
+        
+        return counter;
+        
+        
+    }
+    
+//     private void dfs(Stack<integer> stack, Set<Integer> visited, Map<Integer, List<Integer>> adjacents){
+//         while(!stack.isEmpty()){
+//             Integer curr = stack.pop();
+            
+//             for(Integer adj : ajacents.get(curr)){
+//                 if(!visited.contains(adj)){
+//                     stack.push(adj);
+//                 }
+//             }
+            
+//         }
+//     }
+    
+    private Map<Integer, List<Integer>> createAdjacencyList(int n, int[][] edges){
+        Map<Integer, List<Integer>> adjacents = new HashMap<>();
+        for(int i =0; i < edges.length; i++){
+            int key = edges[i][0];
+            List<Integer> valueList = adjacents.getOrDefault(key, new ArrayList<Integer>());
+            valueList.add(edges[i][1]);
+            adjacents.put(key,valueList);
+            
+            int key1 = edges[i][1];
+            List<Integer> valueList1 = adjacents.getOrDefault(key1, new ArrayList<Integer>());
+            valueList1.add(edges[i][0]);
+            adjacents.put(key1,valueList1);
+            
+            
+        }
+        return adjacents;
+    }
+}
