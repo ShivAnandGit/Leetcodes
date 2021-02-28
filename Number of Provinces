@@ -1,0 +1,45 @@
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        int n = isConnected.length;     
+        
+        int[] roots = new int[n];
+        
+        for(int i =0; i<n; i++){
+            roots[i] = i;
+        }
+        
+        for(int row = 0; row < n; row++){
+            for(int col =0; col < n; col++){
+                
+                if(isConnected[row][col]==1 && row!=col){
+                    int rootRow = findRoots(roots, row);
+                    int rootCol = findRoots(roots, col);
+                    if(rootRow!= rootCol){
+                        roots[col] = row;
+                    }
+                }
+            }
+        }
+        
+        int provinces = 0;
+        
+        for(int i =0; i < n; i++){
+            if(roots[i]==i){
+                provinces++;
+            }
+        }
+        
+        return provinces;
+          
+    }
+    
+    private int findRoots(int[] roots, int node){
+        // while(roots[node]!= node){
+        //     roots[node] = node;
+        // }
+        if(roots[node]==node){
+            return node;
+        }
+        return findRoots(roots, roots[node]);
+    }
+}
