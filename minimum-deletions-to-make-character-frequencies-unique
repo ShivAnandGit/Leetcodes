@@ -1,0 +1,24 @@
+class Solution {
+    public int minDeletions(String s) {
+        Map<Character, Integer> charToFreq = new HashMap<>();
+        
+        for(int i =0; i <s.length(); i++){
+            char current = s.charAt(i);
+            charToFreq.put(current, charToFreq.getOrDefault(current,0)+1);
+        }
+        
+        Set<Integer> frequencies  = new HashSet<>();
+        
+        int result = 0;
+        
+        for(Map.Entry<Character,Integer> entry : charToFreq.entrySet()){
+            int currentValue = entry.getValue();
+            while(currentValue!=0 && !frequencies.add(currentValue)){
+                result++;
+                currentValue--;
+            }
+        }
+        return result;
+    }
+}
+
