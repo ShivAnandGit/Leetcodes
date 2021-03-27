@@ -1,0 +1,47 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        Map<Integer, Integer> indegrees = new HashMap<>();
+        Map<Integer, List<Integer>> adjList = new HashMap<>();
+        
+        int rowNums = prerequisites.length;
+        
+        for(int[] row: prerequisites){
+            List<Integer> neighbors = adjList.getOrDefault(row[1], new ArrayList<>());
+            neighbors.add(row[0]);
+            adjList.put(row[1], neighbors);
+            indegrees.put(row[0], indegrees.getOrDefault(row[0],0)+1);
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        
+        for(int i =0; i < numCourses; i++){
+               if(indegrees.get(i)==null || indegrees.get(i)==0){
+                   q.add(i);
+               }
+        }
+       
+        int[] result = new int[numCourses];
+        int count =0;
+         
+        while(!q.isEmpty()){
+            int current = q.poll();
+            result[count]=current;
+            count++;
+            if(adjList.get(current)==null){
+                continue;
+            }
+            for(int neighbor : adjList.get(current)){
+                indegrees.put(neighbor, indegrees.get(neighbor)-1);
+                if(indegrees.get(neighbor) <=0){
+                    q.add(neighbor);
+                }
+            }
+            
+        }
+        
+        if(count == numCourses){
+            return result;
+        }
+        return new int[0];
+    }
+}
